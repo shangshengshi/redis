@@ -36,6 +36,7 @@
 #include "rio.h"
 
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -941,6 +942,10 @@ struct redisServer {
     dict *commands;             /* Command table */
     dict *orig_commands;        /* Command table before command renaming. */
     aeEventLoop *el;
+
+    aeEventLoop* nio_rel;       // for network non block read
+    aeEventLoop* nio_wel;       // for network non block write
+
     unsigned int lruclock;      /* Clock for LRU eviction */
     int shutdown_asap;          /* SHUTDOWN needed ASAP */
     int activerehashing;        /* Incremental rehash in serverCron() */
@@ -1275,6 +1280,10 @@ struct redisServer {
     int watchdog_period;  /* Software watchdog period in ms. 0 = off */
     /* System hardware info */
     size_t system_memory_size;  /* Total memory in system as reported by OS */
+
+    pthread_t nio_rtid;
+    pthread_t nio_wtid;
+    int32_t proc_thread_num;
 
     /* Mutexes used to protect atomic variables when atomic builtins are
      * not available. */

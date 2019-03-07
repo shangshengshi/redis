@@ -2048,6 +2048,23 @@ void initServer(void) {
             strerror(errno));
         exit(1);
     }
+
+    server.nio_rel = aeCreateEventLoop(server.maxclients+CONFIG_FDSET_INCR);
+    if (server.nio_rel == NULL) {
+        serverLog(LL_WARNING,
+            "Failed creating the nio_rel event loop. Error message: '%s'",
+            strerror(errno));
+        exit(1);
+    }
+
+    server.nio_wel = aeCreateEventLoop(server.maxclients+CONFIG_FDSET_INCR);
+    if (server.nio_wel == NULL) {
+        serverLog(LL_WARNING,
+            "Failed creating the nio_wel event loop. Error message: '%s'",
+            strerror(errno));
+        exit(1);
+    }
+
     server.db = zmalloc(sizeof(redisDb)*server.dbnum);
 
     /* Open the TCP listening socket for the user commands. */

@@ -1,0 +1,6 @@
+TODO:
+1. multiple thread network io and multiple thread process
+2. multiple thead synchronize
+3. data persistance
+4. cluster manager
+5. unit test and system test
