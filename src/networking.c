@@ -94,7 +94,7 @@ client *createClient(int fd) {
         anetEnableTcpNoDelay(NULL,fd);
         if (server.tcpkeepalive)
             anetKeepAlive(NULL,fd,server.tcpkeepalive);
-        if (aeCreateFileEvent(server.el,fd,AE_READABLE,
+        if (aeCreateFileEvent(server.nio_el,fd,AE_READABLE,
             readQueryFromClient, c) == AE_ERR)
         {
             close(fd);

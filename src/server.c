@@ -2049,18 +2049,10 @@ void initServer(void) {
         exit(1);
     }
 
-    server.nio_rel = aeCreateEventLoop(server.maxclients+CONFIG_FDSET_INCR);
-    if (server.nio_rel == NULL) {
+    server.nio_el = aeCreateEventLoop(server.maxclients+CONFIG_FDSET_INCR);
+    if (server.nio_el == NULL) {
         serverLog(LL_WARNING,
-            "Failed creating the nio_rel event loop. Error message: '%s'",
-            strerror(errno));
-        exit(1);
-    }
-
-    server.nio_wel = aeCreateEventLoop(server.maxclients+CONFIG_FDSET_INCR);
-    if (server.nio_wel == NULL) {
-        serverLog(LL_WARNING,
-            "Failed creating the nio_wel event loop. Error message: '%s'",
+            "Failed creating the nio_el event loop. Error message: '%s'",
             strerror(errno));
         exit(1);
     }
@@ -2148,7 +2140,7 @@ void initServer(void) {
     /* Create an event handler for accepting new connections in TCP and Unix
      * domain sockets. */
     for (j = 0; j < server.ipfd_count; j++) {
-        if (aeCreateFileEvent(server.el, server.ipfd[j], AE_READABLE,
+        if (aeCreateFileEvent(server.nio_el, server.ipfd[j], AE_READABLE,
             acceptTcpHandler,NULL) == AE_ERR)
             {
                 serverPanic(

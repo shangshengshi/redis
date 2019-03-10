@@ -943,8 +943,7 @@ struct redisServer {
     dict *orig_commands;        /* Command table before command renaming. */
     aeEventLoop *el;
 
-    aeEventLoop* nio_rel;       // for network non block read
-    aeEventLoop* nio_wel;       // for network non block write
+    aeEventLoop* nio_el;       // for network non block read and write
 
     unsigned int lruclock;      /* Clock for LRU eviction */
     int shutdown_asap;          /* SHUTDOWN needed ASAP */
